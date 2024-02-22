@@ -248,6 +248,9 @@ export default {
         ) {
           this.items.push(payments);
         }
+        const links = { text: 'Links', icon: 'mdi-link-variant' };
+        this.items.push(links);
+
       });
       evntBus.$on('set_last_invoice', (data) => {
         this.last_invoice = data;

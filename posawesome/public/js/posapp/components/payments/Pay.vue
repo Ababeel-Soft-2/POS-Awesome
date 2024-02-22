@@ -487,6 +487,30 @@ export default {
   },
 
   methods: {
+    load_print_page(payment_entry) {
+      const print_format =
+        this.pos_profile.custom_payment_print_format
+      const letter_head = this.pos_profile.letter_head || 0;
+      const url =
+        frappe.urllib.get_base_url() +
+        "/printview?doctype=Payment%20Entry&name=" +
+        payment_entry +
+        "&trigger_print=1" +
+        "&format=" +
+        print_format +
+        "&no_letterhead=" +
+        letter_head;
+      const printWindow = window.open(url, "Print");
+      printWindow.addEventListener(
+        "load",
+        function () {
+          printWindow.print();
+          // printWindow.close();
+          // NOTE : uncomoent this to auto closing printing window
+        },
+        true
+      );
+    },
     check_opening_entry() {
       return frappe
         .call("posawesome.posawesome.api.posapp.check_opening_shift", {
@@ -720,6 +744,11 @@ export default {
             vm.get_unallocated_payments();
             vm.set_mpesa_search_params();
             vm.get_draft_mpesa_payments_register();
+            r.message.all_payments_entry.forEach((element) => {
+              vm.load_print_page(element.name)
+            })
+            
+
           }
         },
       });

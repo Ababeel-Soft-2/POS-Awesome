@@ -364,6 +364,10 @@ def get_items_groups():
         as_dict=1,
     )
 
+@frappe.whitelist()
+def get_price_lists():
+    return frappe.get_list("Price List",filters={"selling":1})
+
 
 def get_customer_groups(pos_profile):
     customer_groups = []

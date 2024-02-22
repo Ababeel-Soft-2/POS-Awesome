@@ -127,7 +127,7 @@
     </v-card>
     <v-card class="cards mb-0 mt-3 pa-2 grey lighten-5">
       <v-row no-gutters align="center" justify="center">
-        <v-col cols="12">
+        <v-col cols="6">
           <v-select
             :items="items_group"
             :label="frappe._('Items Group')"
@@ -135,6 +135,17 @@
             outlined
             hide-details
             v-model="item_group"
+            v-on:change="search_onchange"
+          ></v-select>
+        </v-col>
+        <v-col cols="6" class="pa-2">
+          <v-select
+            :items="price_lists"
+            :label="frappe._('Price List')"
+            dense
+            outlined
+            hide-details
+            v-model="price_list"
             v-on:change="search_onchange"
           ></v-select>
         </v-col>
@@ -177,6 +188,8 @@ export default {
     flags: {},
     items_view: "list",
     item_group: "ALL",
+    price_list:"",
+    price_lists:[],
     loading: false,
     items_group: ["ALL"],
     items: [],
@@ -225,6 +238,11 @@ export default {
       let search = this.get_search(this.first_search);
       let gr = "";
       let sr = "";
+      let pl=vm.price_list;
+
+      if(vm.customer_price_list){
+        pl=vm.customer_price_list;
+      }
       if (search) {
         sr = search;
       }
@@ -244,7 +262,7 @@ export default {
         method: "posawesome.posawesome.api.posapp.get_items",
         args: {
           pos_profile: vm.pos_profile,
-          price_list: vm.customer_price_list,
+          price_list: pl,
           item_group: gr,
           search_value: sr,
         },
@@ -300,6 +318,25 @@ export default {
           },
         });
       }
+    },
+    get_price_lists() {
+      if (!this.pos_profile) {
+        console.log("No POS Profile");
+        return;
+      }
+      const vm = this;
+      frappe.call({
+        method: "posawesome.posawesome.api.posapp.get_price_lists",
+        args: {},
+        callback: function (r) {
+          if (r.message) {
+            r.message.forEach((element) => {
+              vm.price_lists.push(element.name);
+            });
+          }
+        },
+      });
+      
     },
     getItmesHeaders() {
       const items_headers = [
@@ -395,6 +432,7 @@ export default {
     },
     search_onchange() {
       const vm = this;
+      vm.get_items();
       if (vm.pos_profile.pose_use_limit_search) {
         vm.get_items();
       } else {
@@ -642,6 +680,8 @@ export default {
     this.$nextTick(function () {});
     evntBus.$on("register_pos_profile", (data) => {
       this.pos_profile = data.pos_profile;
+      this.price_list=data.pos_profile.custom_default_price_list;
+      this.get_price_lists();
       this.get_items();
       this.get_items_groups();
       this.items_view = this.pos_profile.posa_default_card_view
