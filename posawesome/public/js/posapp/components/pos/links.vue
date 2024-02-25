@@ -26,6 +26,7 @@
           { title: __('Sales Invoice'), url: frappe.urllib.get_base_url() + '/app/sales-invoice', icon: 'mdi-file-send' },
           { title: __('General Ledger'), url: frappe.urllib.get_base_url() + '/app/query-report/General Ledger', icon: 'mdi-chart-line' },
           { title: __('Customer Ledger Summery'), url: frappe.urllib.get_base_url() + '/app/query-report/Customer Ledger Summary', icon: 'mdi-chart-pie' },
+          { title: __('Expense Entry'), url: frappe.urllib.get_base_url() + '/app/expense-entry/new', icon: 'mdi-cash-plus' },
         ]
       };
     },
