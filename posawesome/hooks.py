@@ -264,4 +264,8 @@ fixtures = [
         "doctype": "Property Setter",
         "filters": [["name", "in", ("Sales Invoice-posa_pos_opening_shift-no_copy")]],
     },
+        {
+        "doctype": "Client Script",
+        "filters": [["name", "in", ("Generate Barcode in Item")]],
+    },
 ]

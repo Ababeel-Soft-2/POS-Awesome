@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Item",
+  "enabled": 1,
+  "modified": "2024-05-11 21:24:23.697781",
+  "module": null,
+  "name": "Generate Barcode in Item",
+  "script": "frappe.ui.form.on('Item', {\n    refresh: function(frm) {\n        frm.add_custom_button(__('Generate Barcode'), function(){\n            // Clear barcode table\n            var barcodeTable = frm.fields_dict['barcodes'].grid;\n            barcodeTable.remove_all();\n\n            // Generate random EAN-13 barcode\n            var barcodeData = generateEAN13Barcode();\n\n            // Add barcode to the table\n            var row = barcodeTable.add_new_row();\n            frappe.model.set_value(row.doctype, row.name, 'barcode', barcodeData);\n            frappe.model.set_value(row.doctype, row.name, 'barcode_type', 'EAN');\n\n            // Save the document\n            frm.save();\n\n        }, __(\"Barcode\"));\n        frm.add_custom_button(__('Print Barcode'), function(){\n            // Get barcode data\n            var barcodeData = frm.doc.barcodes[0].barcode ;\n        \n\n            // Call backend API to generate barcode image\n            frappe.call({\n                method: 'posawesome.posawesome.api.barcode.generate_bar_code',\n                args: {\n                    barcode_data: barcodeData,\n                    item:frm.doc.item_name\n                },\n                callback: function(response) {\n                    if (response.message) {\n                    // Open a new window and display the barcode\n                    var printWindow = window.open('', '_blank');\n                    printWindow.document.write(response.message);\n                    printWindow.print();\n                    \n                } else {\n                    frappe.msgprint('Failed to generate barcode.');\n                }\n                   \n                }\n            });\n        }, __(\"Barcode\"));\n    }\n});\n\nfunction generateEAN13Barcode() {\n    // Generate random 12-digit number\n    var randomNum = Math.floor(100000000000 + Math.random() * 900000000000);\n    var randomNumStr = randomNum.toString();\n\n    // Calculate checksum digit\n    var sum = 0;\n    for (var i = 0; i < randomNumStr.length; i++) {\n        var digit = parseInt(randomNumStr[i]);\n        sum += i % 2 === 0 ? digit : digit * 3;\n    }\n    var checksumDigit = (10 - (sum % 10)) % 10;\n\n    // Construct the full EAN-13 barcode\n    var barcodeValue = randomNumStr + checksumDigit;\n\n    // Return the generated barcode value\n    return barcodeValue;\n}\n\n",
+  "view": "Form"
+ }
+]
