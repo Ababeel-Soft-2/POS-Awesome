@@ -14,22 +14,15 @@ def generate_bar_code(barcode_data, item,price=None):
     barcode_base64 = base64.b64encode(barcode_path.getvalue()).decode()
 
     html_content = """
-        <div style="text-align: center;margin:auto;max-width:500px;">
-        <p style="font-size:32px; font-weight: bold;margin-top:-5px;margin-bottom:-5px;text-align: center; text-wrap: balance;">{1}</p>
-        </div>
-        <div style="text-align: center;margin:auto;margin-top:-5px">
-        <img  style="align:center" src="data:image/png;base64,{0}" alt="Barcode">
-        </div>
-    """
+    <div style="text-align: center;margin:auto;max-width:500px;">
+    <p style="font-size:32px; font-weight: bold;margin-top:-5px;margin-bottom:-5px;text-align: center; text-wrap: balance;">{1}</p>
+    </div>
+    <div style="text-align: center;margin:auto;margin-top:-5px">
+    <img  style="align:center" src="data:image/png;base64,{0}" alt="Barcode">
+    </div>
+    <div style="text-align: center;margin:auto;max-width:500px;">
+    <p style="font-size:32px; font-weight: bold;margin-top:-5px;margin-bottom:-5px;text-align: center; text-wrap: balance;">{2}</p>
+    </div>
+    """.format(barcode_base64, item,price)
     
-    if price:
-        html_content+="""
-        <div style="text-align: center;margin:auto;max-width:500px;">
-        <p style="font-size:32px; font-weight: bold;margin-top:-5px;margin-bottom:-5px;text-align: center; text-wrap: balance;">{2}</p>
-        </div>
-        """
-        html_content.format(barcode_base64, item,price)
-    else:
-        html_content.format(barcode_base64, item)
-
     return html_content
