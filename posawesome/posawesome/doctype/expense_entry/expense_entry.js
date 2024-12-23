@@ -27,7 +27,52 @@ frappe.ui.form.on('Expense Entry', {
 			}
 		});
 
+	},account_currency : function(frm){
+		chek_exchange_rate(frm);
+	},paid_amount : function(frm){
+		set_total_local_currancy(frm);
+	},
+	exchange_rate : function(frm){
+		set_total_local_currancy(frm);
+	},refresh : function(frm){
+		chek_exchange_rate(frm);
+	},account_paid_from :function(frm){
+		set_exchange_rate(frm);
 	}
+
 });
 
+function chek_exchange_rate (frm){
+let enable = 0;
+if(frm.doc.account_currency !='LYD'){ enable = 1 ;}
+frm.toggle_display('exchange_rate',enable);
+frm.set_df_property('exchange_rate', 'reqd',enable);
 
+}
+
+function set_total_local_currancy(frm){
+	if(frm.doc.paid_amount && frm.doc.exchange_rate){
+		let num = frm.doc.paid_amount  * frm.doc.exchange_rate
+	   frm.set_value("local_currency_value",num);
+	}else{
+	   frm.set_value("local_currency_value","");
+	}	
+}
+
+
+function set_exchange_rate(frm){
+	if(frm.doc.account_paid_from){
+		frappe.call({
+			method: "posawesome.posawesome.doctype.expense_entry.expense_entry.get_old_exhange_rate",
+			args: {
+			account:frm.doc.account_paid_from
+			},
+			callback: function(r) {
+			frm.set_value("exchange_rate",r.message);
+			}
+			});
+	}
+	
+	
+	
+}

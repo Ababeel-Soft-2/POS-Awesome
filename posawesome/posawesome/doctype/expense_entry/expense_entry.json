@@ -9,10 +9,13 @@
  "field_order": [
   "naming_series",
   "account_paid_from",
+  "account_currency",
   "posting_date",
   "column_break_hotbo",
   "account_paid_to",
   "paid_amount",
+  "exchange_rate",
+  "local_currency_value",
   "section_break_spzri",
   "cost_center",
   "journal_entry",
@@ -64,6 +67,7 @@
    "fieldname": "paid_amount",
    "fieldtype": "Currency",
    "label": "Paid Amount",
+   "options": "account_currency",
    "reqd": 1
   },
   {
@@ -73,7 +77,6 @@
   {
    "fieldname": "cost_center",
    "fieldtype": "Link",
-   "hidden": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Cost Center",
@@ -125,12 +128,33 @@
    "fieldtype": "Data",
    "label": "Canceled Journal Entry",
    "read_only": 1
+  },
+  {
+   "fetch_from": "account_paid_from.account_currency",
+   "fieldname": "account_currency",
+   "fieldtype": "Link",
+   "label": "Account Currency",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "exchange_rate",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Exchange Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "local_currency_value",
+   "fieldtype": "Currency",
+   "label": "Local Currency Value",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-25 14:39:29.977253",
+ "modified": "2024-12-23 11:06:19.123746",
  "modified_by": "Administrator",
  "module": "POSAwesome",
  "name": "Expense Entry",
