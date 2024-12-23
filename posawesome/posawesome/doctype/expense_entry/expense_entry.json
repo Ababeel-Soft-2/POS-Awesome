@@ -80,7 +80,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Cost Center",
-   "options": "Cost Center"
+   "options": "Cost Center",
+   "reqd": 1
   },
   {
    "fieldname": "journal_entry",
@@ -154,7 +155,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-12-23 11:06:19.123746",
+ "modified": "2024-12-23 11:12:32.650088",
  "modified_by": "Administrator",
  "module": "POSAwesome",
  "name": "Expense Entry",
