@@ -14,7 +14,7 @@ frappe.ui.form.on('Expense Entry', {
 		frm.set_query('account_paid_to', () => {
 			return {
 				filters: {
-					account_type:["in",["Expense Account","Expenses Included In Valuation"]],
+					account_type:["in",["Expense Account","Expenses Included In Valuation","Chargeable"]],
 					is_group:0
 				}
 			}
