@@ -60,11 +60,8 @@ class ExpenseEntry(Document):
 def get_old_exhange_rate(account):
 	old_exhange_rate=0.0
 	account_balance,account_currency_balance=get_account_balance(account)
-	if not account_currency_balance:
-		msg="Account ' "+str(account)+" ' Balance Is :"+str(account_currency_balance)+""
-		frappe.throw(msg)
-
-	old_exhange_rate =round((account_balance/account_currency_balance),3)
+	if account_currency_balance:
+		old_exhange_rate =round((account_balance/account_currency_balance),3)
 	return old_exhange_rate
 
 
