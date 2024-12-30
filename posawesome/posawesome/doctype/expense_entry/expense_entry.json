@@ -13,6 +13,7 @@
   "posting_date",
   "column_break_hotbo",
   "account_paid_to",
+  "expance_account_currency",
   "paid_amount",
   "exchange_rate",
   "local_currency_value",
@@ -141,21 +142,27 @@
   {
    "fieldname": "exchange_rate",
    "fieldtype": "Currency",
-   "hidden": 1,
-   "label": "Exchange Rate",
-   "read_only": 1
+   "label": "Exchange Rate"
   },
   {
    "fieldname": "local_currency_value",
    "fieldtype": "Currency",
    "label": "Local Currency Value",
    "read_only": 1
+  },
+  {
+   "fetch_from": "account_paid_to.account_currency",
+   "fieldname": "expance_account_currency",
+   "fieldtype": "Link",
+   "label": "Expance Account Currency",
+   "options": "Currency",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-12-23 11:12:32.650088",
+ "modified": "2024-12-30 10:57:36.940607",
  "modified_by": "Administrator",
  "module": "POSAwesome",
  "name": "Expense Entry",

@@ -36,15 +36,17 @@ frappe.ui.form.on('Expense Entry', {
 		set_total_local_currancy(frm);
 	},refresh : function(frm){
 		chek_exchange_rate(frm);
-	},account_paid_from :function(frm){
-		set_exchange_rate(frm);
+	},expance_account_currency : function(frm){
+		chek_exchange_rate(frm);
 	}
+	
+	
 
 });
 
 function chek_exchange_rate (frm){
 let enable = 0;
-if(frm.doc.account_currency !='LYD'){ enable = 1 ;}
+if(frm.doc.account_currency !='LYD' || frm.doc.expance_account_currency !='LYD'){ enable = 1 ;}
 frm.toggle_display('exchange_rate',enable);
 frm.set_df_property('exchange_rate', 'reqd',enable);
 

@@ -12,11 +12,45 @@ class ExpenseEntry(Document):
 
 
 	def before_submit(self):
+		paid_from = 0
+		paid_to = 0
+		exchange_rate_from=1
+		exchange_rate_to=1
+		if self.account_currency =="LYD" and self.expance_account_currency =="LYD":
+			paid_from = paid_to = self.paid_amount
+			exchange_rate_from = exchange_rate_to = 1 
+
+		elif self.account_currency !="LYD" and self.expance_account_currency =="LYD":
+			paid_from = self.paid_amount
+			paid_to = self.local_currency_value
+			exchange_rate_from = self.exchange_rate
+			exchange_rate_to = 1
+
+		elif self.account_currency !="LYD" and self.expance_account_currency !="LYD":
+			paid_from = self.paid_amount
+			paid_to = self.paid_amount
+			exchange_rate_from = self.exchange_rate
+			exchange_rate_to = self.exchange_rate
+
+		elif self.account_currency =="LYD" and self.expance_account_currency !="LYD":
+			paid_from = self.local_currency_value
+			paid_to = self.paid_amount
+			exchange_rate_from = 1
+			exchange_rate_to = self.exchange_rate
+
 		exchange_rate = self.exchange_rate
 		local_currency_value= self.local_currency_value
 		if self.account_currency =="LYD":
 			exchange_rate=1
 			local_currency_value = self.paid_amount
+
+
+
+		
+
+
+
+		
 
 
 		journal_entry=frappe.new_doc("Journal Entry")
@@ -29,15 +63,16 @@ class ExpenseEntry(Document):
 		journal_entry.append("accounts",{
 		"account":self.account_paid_from,
 		"cost_center":self.cost_center,
-		"credit_in_account_currency":self.paid_amount,
+		"credit_in_account_currency":paid_from,
 		"debit_in_account_currency":0,
-		"exchange_rate":exchange_rate
+		"exchange_rate":exchange_rate_from
 		})
 		journal_entry.append("accounts", {
 		"account":self.account_paid_to,
 		"cost_center":self.cost_center,
 		"credit_in_account_currency":0,
-		"debit_in_account_currency":local_currency_value,
+		"debit_in_account_currency":paid_to,
+		"exchange_rate":exchange_rate_to
 		})
 		journal_entry.save()
 		journal_entry.submit()
@@ -58,7 +93,7 @@ class ExpenseEntry(Document):
 
 @frappe.whitelist()
 def get_old_exhange_rate(account):
-	old_exhange_rate=0.0
+	old_exhange_rate=1
 	account_balance,account_currency_balance=get_account_balance(account)
 	if account_currency_balance:
 		old_exhange_rate =round((account_balance/account_currency_balance),3)
